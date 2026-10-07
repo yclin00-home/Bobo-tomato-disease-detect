@@ -100,7 +100,7 @@ def calculate_infection_ratio_from_cv(img_bgr):
 # =============================================================
 def predict_tomato_disease(input_pil_img):
     if input_pil_img is None:
-        return None, "未選擇圖片", "請上傳或點擊選擇一張圖片。", None, None
+        return None, "No image selected", "Please upload or click to select an image.。", None, None
 
     # 自動修正 EXIF 圖片轉向
     input_pil_img = ImageOps.exif_transpose(input_pil_img)
@@ -156,7 +156,7 @@ example_images = []
 if os.path.exists("./tomato-test.jpg"):
     example_images.append(["./tomato-test.jpg"])
 
-with gr.Blocks(title="番茄葉片病害 AI 診斷系統") as demo:
+with gr.Blocks(title="AI Diagnostic System for Tomato Leaf Diseases") as demo:
     gr.Markdown("#AI-based diagnosis and lesion area analysis system for tomato leaf diseases")
     gr.Markdown(
         "You can **click to upload and select a picture from your computer**, **paste a picture from your scrapbook**, or **click the example image below** for diagnosis:"
