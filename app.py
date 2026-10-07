@@ -130,11 +130,11 @@ def predict_tomato_disease(input_pil_img):
         ratio_str = f"{infection_ratio:.2f}%"
 
         if infection_ratio < 15.0:
-            advice = f"💡 **防護建議**：輕度晚疫病感染 (病斑佔 {infection_ratio:.1f}%)，請即刻剪除病葉並施用有機銅劑保護。"
+            advice = f"💡 **Protection recommendation**：Mild late blight infection (Lesions account for {infection_ratio:.1f}%)，Please immediately remove the diseased leaves and apply an organocopper compound for protection.。"
         elif infection_ratio < 45.0:
-            advice = f"⚠️ **防護建議**：中度晚疫病感染 (病斑佔 {infection_ratio:.1f}%)，需隔離該植株並使用系統性殺菌劑控制擴散。"
+            advice = f"⚠️ **Protection recommendation**：Moderate late blight infection (Lesions account for {infection_ratio:.1f}%)，The plant needs to be isolated and a systemic fungicide used to control its spread."
         else:
-            advice = f"🚨 **警告建議**：重度晚疫病感染 (病斑佔 {infection_ratio:.1f}%)！建議移除植株並銷毀，避免孢子傳播。"
+            advice = f"🚨 **Warning**：Severe late blight infection (Lesions account for {infection_ratio:.1f}%)！It is recommended to remove and destroy the plant to prevent the spread of spores."
 
         return (
             confidences,
@@ -145,7 +145,7 @@ def predict_tomato_disease(input_pil_img):
         )
     else:
         # 非晚疫病或健康狀態
-        advice = f"✅ **檢測結果**：預測為 **{top_pred}**。葉片狀況良好或非晚疫病，無需計算病斑面積。"
+        advice = f"✅ **Test Result:** Predicted as **{top_pred}**. Leaves are in good condition or not late blight; no need to calculate lesion area."
         return confidences, "N/A", advice, None, None
 
 
@@ -157,16 +157,16 @@ if os.path.exists("./tomato-test.jpg"):
     example_images.append(["./tomato-test.jpg"])
 
 with gr.Blocks(title="番茄葉片病害 AI 診斷系統") as demo:
-    gr.Markdown("#番茄葉片病害 AI 診斷與病斑面積分析系統")
+    gr.Markdown("#AI-based diagnosis and lesion area analysis system for tomato leaf diseases")
     gr.Markdown(
-        "您可以**點擊上傳選擇電腦圖片**、**貼上剪貼簿圖片**，或是**點擊下方範例圖片**進行診斷："
+        "You can **click to upload and select a picture from your computer**, **paste a picture from your scrapbook**, or **click the example image below** for diagnosis:"
     )
 
     with gr.Row():
         with gr.Column(scale=1):
             image_input = gr.Image(
                 type="pil",
-                label="選擇或上傳圖片",
+                label="Select or upload an image",
                 sources=["upload", "clipboard"],
             )
 
@@ -174,26 +174,26 @@ with gr.Blocks(title="番茄葉片病害 AI 診斷系統") as demo:
                 gr.Examples(
                     examples=example_images,
                     inputs=image_input,
-                    label="💡 點擊下方範例圖片直接測試：",
+                    label="💡 Click on the example image below to test directly:",
                 )
 
-            btn_submit = gr.Button("🔍 開始診斷", variant="primary")
+            btn_submit = gr.Button("🔍 Start diagnosis", variant="primary")
 
         with gr.Column(scale=1):
             label_output = gr.Label(
-                label="AI 辨識類別與信心度 (Confidence Level)"
+                label="AI Category Recognition and Confidence Level (Confidence Level)"
             )
             ratio_output = gr.Textbox(
-                label="病斑面積比例 (Infection Ratio)"
+                label="Lesion area ratio (Infection Ratio)"
             )
-            advice_output = gr.Markdown(label="診斷與防護建議")
+            advice_output = gr.Markdown(label="Diagnostic and protective recommendations")
 
     with gr.Row():
         leaf_mask_output = gr.Image(
-            label="葉片範圍遮罩 (Leaf Mask)", type="numpy"
+            label="Leaf range masking (Leaf Mask)", type="numpy"
         )
         lesion_mask_output = gr.Image(
-            label="病斑範圍遮罩 (Lesion Mask)", type="numpy"
+            label="Covering the lesion area (Lesion Mask)", type="numpy"
         )
 
     btn_submit.click(
